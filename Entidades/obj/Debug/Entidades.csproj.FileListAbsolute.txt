@@ -1,0 +1,6 @@
+C:\Users\PC\Desktop\GitHub\botTelegram\BotTelegramRestaurante\Entidades\bin\Debug\Entidades.dll
+C:\Users\PC\Desktop\GitHub\botTelegram\BotTelegramRestaurante\Entidades\bin\Debug\Entidades.pdb
+C:\Users\PC\Desktop\GitHub\botTelegram\BotTelegramRestaurante\Entidades\obj\Debug\Entidades.csproj.AssemblyReference.cache
+C:\Users\PC\Desktop\GitHub\botTelegram\BotTelegramRestaurante\Entidades\obj\Debug\Entidades.csproj.CoreCompileInputs.cache
+C:\Users\PC\Desktop\GitHub\botTelegram\BotTelegramRestaurante\Entidades\obj\Debug\Entidades.dll
+C:\Users\PC\Desktop\GitHub\botTelegram\BotTelegramRestaurante\Entidades\obj\Debug\Entidades.pdb

@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D9037355-19A9-4C98-BED0-D333AE8ABBA5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Logica</RootNamespace>
+    <AssemblyName>Logica</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bitacora.cs" />
+    <Compile Include="BotServicio.cs" />
+    <Compile Include="ClienteServicio.cs" />
+    <Compile Include="Comandos\ComandoCancelar.cs" />
+    <Compile Include="Comandos\ComandoConPrefijo.cs" />
+    <Compile Include="Comandos\ComandoEstado.cs" />
+    <Compile Include="Comandos\ComandoInicio.cs" />
+    <Compile Include="Comandos\ComandoMenu.cs" />
+    <Compile Include="Comandos\ComandoNoEntendido.cs" />
+    <Compile Include="Comandos\ComandoPedirPlato.cs" />
+    <Compile Include="Comandos\IComandoBot.cs" />
+    <Compile Include="Espera.cs" />
+    <Compile Include="HistorialServicio.cs" />
+    <Compile Include="MenuRestaurante.cs" />
+    <Compile Include="MensajesBot.cs" />
+    <Compile Include="NotificadorPedidos.cs" />
+    <Compile Include="PedidoServicio.cs" />
+    <Compile Include="ProcesadorMensajes.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReceptorMensajes.cs" />
+    <Compile Include="RestauranteControlador.cs" />
+    <Compile Include="RestauranteException.cs" />
+    <Compile Include="RestauranteFabrica.cs" />
+    <Compile Include="ResumenHistorial.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Datos\Datos.csproj">
+      <Project>{01dbe037-d4a2-433c-a916-6cce228df85d}</Project>
+      <Name>Datos</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Entidades\Entidades.csproj">
+      <Project>{c88f1f47-6ea4-4c77-8af8-a54c63793276}</Project>
+      <Name>Entidades</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
