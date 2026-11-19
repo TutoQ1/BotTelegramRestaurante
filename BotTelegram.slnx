@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="BotTelegram/BotTelegram.csproj" Id="aac83cf1-3487-4f87-93f2-7b7c5a9d5be2" />
+  <Project Path="Datos/Datos.csproj" Id="01dbe037-d4a2-433c-a916-6cce228df85d" />
+  <Project Path="Entidades/Entidades.csproj" Id="c88f1f47-6ea4-4c77-8af8-a54c63793276" />
+  <Project Path="Logica/Logica.csproj" Id="d9037355-19a9-4c98-bed0-d333ae8abba5" />
+</Solution>
