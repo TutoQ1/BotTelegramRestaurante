@@ -38,38 +38,76 @@ namespace BotTelegram
         private void ConstruirInterfaz()
         {
             Text = "Restaurante - Panel de pedidos (Bot de Telegram)";
-            Width = 1000;
-            Height = 650;
+            Width = 1050;
+            Height = 700;
+            MinimumSize = new Size(900, 600);
             StartPosition = FormStartPosition.CenterScreen;
+            Tema.EstilizarVentana(this);
 
-            var panelTop = new Panel { Dock = DockStyle.Top, Height = 50 };
-            txtToken = new TextBox { Left = 60, Top = 13, Width = 400, UseSystemPasswordChar = true };
-            btnIniciar = new Button { Text = "Iniciar bot", Left = 475, Top = 11, Width = 100, Height = 28 };
-            btnDetener = new Button { Text = "Detener", Left = 585, Top = 11, Width = 90, Height = 28, Enabled = false };
-            lblEstado = new Label { Text = "● Bot detenido", Left = 695, Top = 17, AutoSize = true, ForeColor = Color.Firebrick };
-            panelTop.Controls.Add(new Label { Text = "Token:", Left = 10, Top = 17, AutoSize = true });
-            panelTop.Controls.AddRange(new Control[] { txtToken, btnIniciar, btnDetener, lblEstado });
+            // ---- Encabezado oscuro con el estado del bot ----
+            var encabezado = Tema.Encabezado("Panel de pedidos", "Restaurante · Bot de Telegram");
+            lblEstado = new Label
+            {
+                Text = "● Bot detenido",
+                Dock = DockStyle.Right,
+                Width = 200,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = Tema.Negrita,
+                ForeColor = Tema.TextoSobreOscuro,
+                BackColor = Color.Transparent
+            };
+            encabezado.Controls.Add(lblEstado);
 
-            var panelBottom = new Panel { Dock = DockStyle.Bottom, Height = 220 };
+            // ---- Barra del token ----
+            var panelTop = new Panel { Dock = DockStyle.Top, Height = 64, BackColor = Tema.Crema };
+            txtToken = new TextBox { Left = 100, Top = 18, Width = 400, UseSystemPasswordChar = true };
+            Tema.EstilizarCampo(txtToken);
+            btnIniciar = new Button { Text = "Iniciar bot", Left = 520, Top = 14, Width = 120, Enabled = true };
+            btnDetener = new Button { Text = "Detener", Left = 650, Top = 14, Width = 110, Enabled = false };
+            Tema.BotonPrimario(btnIniciar);
+            Tema.BotonSecundario(btnDetener, Tema.Oscuro);
+            panelTop.Controls.Add(Tema.Etiqueta("Token", 24, 22));
+            panelTop.Controls.AddRange(new Control[] { txtToken, btnIniciar, btnDetener });
+
+            // ---- Registro de actividad (abajo) ----
+            var panelLog = new Panel { Dock = DockStyle.Bottom, Height = 190, Padding = new Padding(24, 0, 24, 20), BackColor = Tema.Crema };
+            var fondoLog = new Panel { Dock = DockStyle.Fill, Padding = new Padding(14, 12, 8, 10), BackColor = Tema.Oscuro };
             txtLog = new TextBox
             {
                 Dock = DockStyle.Fill,
                 Multiline = true,
                 ReadOnly = true,
                 ScrollBars = ScrollBars.Vertical,
-                BackColor = Color.Black,
-                ForeColor = Color.LightGreen,
-                Font = new Font("Consolas", 9)
+                BorderStyle = BorderStyle.None,
+                BackColor = Tema.Oscuro,
+                ForeColor = Tema.Crema,
+                Font = new Font("Consolas", 9.5f)
             };
-            var panelBotones = new Panel { Dock = DockStyle.Top, Height = 45 };
-            btnListo = new Button { Text = "Marcar como listo", Left = 10, Top = 8, Width = 170, Height = 30 };
-            btnCancelar = new Button { Text = "Cancelar pedido", Left = 190, Top = 8, Width = 160, Height = 30 };
-            btnHistorial = new Button { Text = "Historial", Left = 360, Top = 8, Width = 120, Height = 30 };
+            fondoLog.Controls.Add(txtLog);
+            var tituloLog = new Label
+            {
+                Text = "Registro de actividad",
+                Dock = DockStyle.Top,
+                Height = 30,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Font = Tema.Negrita,
+                ForeColor = Tema.Oscuro
+            };
+            panelLog.Controls.Add(fondoLog);
+            panelLog.Controls.Add(tituloLog);
+
+            // ---- Botones de acción ----
+            var panelBotones = new Panel { Dock = DockStyle.Bottom, Height = 62, Padding = new Padding(24, 12, 24, 12), BackColor = Tema.Crema };
+            btnListo = new Button { Text = "Marcar como listo", Left = 24, Top = 12, Width = 180 };
+            btnCancelar = new Button { Text = "Cancelar pedido", Left = 214, Top = 12, Width = 170 };
+            btnHistorial = new Button { Text = "Historial", Width = 130, Dock = DockStyle.Right };
+            Tema.BotonPrimario(btnListo);
+            Tema.BotonSecundario(btnCancelar, Tema.Acento);
+            Tema.BotonSecundario(btnHistorial, Tema.Oscuro);
             panelBotones.Controls.AddRange(new Control[] { btnListo, btnCancelar, btnHistorial });
 
-            panelBottom.Controls.Add(txtLog);
-            panelBottom.Controls.Add(panelBotones);
-
+            // ---- Tabla de pedidos ----
+            var panelTabla = new Panel { Dock = DockStyle.Fill, Padding = new Padding(24, 4, 24, 8), BackColor = Tema.Crema };
             dgv = new DataGridView
             {
                 Dock = DockStyle.Fill,
@@ -78,10 +116,9 @@ namespace BotTelegram
                 AllowUserToDeleteRows = false,
                 MultiSelect = false,
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
-                RowHeadersVisible = false,
-                BackgroundColor = Color.White
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
             };
+            Tema.EstilizarGrid(dgv);
             dgv.Columns.Add("id", "N°");
             dgv.Columns.Add("cliente", "Cliente");
             dgv.Columns.Add("plato", "Plato");
@@ -89,10 +126,17 @@ namespace BotTelegram
             dgv.Columns.Add("faltan", "Tiempo restante");
             dgv.Columns.Add("estado", "Estado");
             dgv.Columns[0].FillWeight = 30;
+            Tema.CentrarColumna(dgv.Columns[0]);
+            Tema.CentrarColumna(dgv.Columns[3]);
+            Tema.CentrarColumna(dgv.Columns[4]);
+            panelTabla.Controls.Add(dgv);
 
-            Controls.Add(dgv);
-            Controls.Add(panelBottom);
+            // El último control agregado queda en el borde: se agregan de adentro hacia afuera.
+            Controls.Add(panelTabla);
+            Controls.Add(panelBotones);
+            Controls.Add(panelLog);
             Controls.Add(panelTop);
+            Controls.Add(encabezado);
         }
 
         private void ConectarEventos()
@@ -134,13 +178,13 @@ namespace BotTelegram
             btnDetener.Enabled = false;
             txtToken.Enabled = true;
             lblEstado.Text = "● Bot detenido";
-            lblEstado.ForeColor = Color.Firebrick;
+            lblEstado.ForeColor = Tema.TextoSobreOscuro;
         }
 
         private void MostrarBotActivo()
         {
             lblEstado.Text = "● Bot activo";
-            lblEstado.ForeColor = Color.Green;
+            lblEstado.ForeColor = Tema.AcentoSobreOscuro;
             btnDetener.Enabled = true;
             txtToken.Enabled = false;
         }
@@ -224,7 +268,7 @@ namespace BotTelegram
             fila.Cells[3].Value = pedido.HoraPedido.ToString("HH:mm:ss");
             fila.Cells[4].Value = pedido.Notificado ? "-" : FormatearTiempo(pedido.TiempoRestante(DateTime.Now));
             fila.Cells[5].Value = pedido.Notificado ? Textos.ListoAvisado : Textos.EnPreparacion;
-            fila.DefaultCellStyle.ForeColor = pedido.Notificado ? Color.Gray : Color.Black;
+            Tema.EstiloFila(fila, 5, pedido.Cancelado, pedido.Notificado);
         }
 
         private static string FormatearTiempo(TimeSpan tiempo)
