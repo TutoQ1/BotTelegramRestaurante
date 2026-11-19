@@ -37,12 +37,20 @@ namespace Logica
             // El orden importa: ComandoNoEntendido va al final porque atiende cualquier texto.
             ProcesadorMensajes procesador = new ProcesadorMensajes(new IComandoBot[]
             {
+
+                new ComandoConfirmar(pedidos),
+                new ComandoResumen(pedidos),
+                new ComandoCancelarSeleccion(pedidos),
+                new ComandoCancelarUno(pedidos),
+                new ComandoCancelarTodos(pedidos),
+                new ComandoCancelarPorId(pedidos),
                 new ComandoPedirPlato(menu, pedidos, bitacora),
                 new ComandoInicio(menu),
                 new ComandoMenu(menu),
                 new ComandoEstado(pedidos),
                 new ComandoCancelar(pedidos),
                 new ComandoNoEntendido(menu)
+
             });
 
             ReceptorMensajes receptor = new ReceptorMensajes(canal, procesador, clientes, bitacora);

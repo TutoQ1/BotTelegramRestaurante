@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Entidades;
 
 namespace Logica.Comandos
@@ -15,7 +15,11 @@ namespace Logica.Comandos
 
         public bool Atiende(string texto)
         {
-            return texto.StartsWith(prefijo, StringComparison.OrdinalIgnoreCase);
+            if (texto.StartsWith(prefijo, StringComparison.OrdinalIgnoreCase)) return true;
+            if (prefijo == "/menu") return texto == "🍽 Menú" || texto == "↩️ Volver al menú";
+            if (prefijo == "/estado") return texto == "📦 Seguimiento";
+            if (prefijo == "/cancelar") return texto == "❌ Cancelar pedido";
+            return false;
         }
 
         public abstract string Ejecutar(MensajeEntrante mensaje);

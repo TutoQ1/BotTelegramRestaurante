@@ -132,6 +132,80 @@ namespace Logica
             }
         }
 
+        private readonly Dictionary<long, List<Plato>> selecciones = new Dictionary<long, List<Plato>>();
+
+        public void PrepararSeleccion(long chatId, Plato plato)
+        {
+            lock (candado)
+            {
+                List<Plato> lista;
+                if (!selecciones.TryGetValue(chatId, out lista))
+                {
+                    lista = new List<Plato>();
+                    selecciones[chatId] = lista;
+                }
+                lista.Add(plato);
+            }
+        }
+
+        public List<Plato> ObtenerSelecciones(long chatId)
+        {
+            lock (candado)
+            {
+                List<Plato> lista;
+                return selecciones.TryGetValue(chatId, out lista) ? lista.ToList() : new List<Plato>();
+            }
+        }
+
+        public Plato ObtenerSeleccion(long chatId)
+        {
+            lock (candado)
+            {
+                List<Plato> lista;
+                return selecciones.TryGetValue(chatId, out lista) && lista.Count > 0 ? lista[lista.Count - 1] : null;
+            }
+        }
+
+        public void LimpiarSeleccion(long chatId)
+        {
+            lock (candado) { selecciones.Remove(chatId); }
+        }
+
+        // Como Registrar, pero para todos los platos elegidos. La base asigna el Id.
+        public List<Pedido> ConfirmarSeleccion(long chatId, string nombreCliente)
+        {
+            lock (candado)
+            {
+                List<Plato> platos;
+                if (!selecciones.TryGetValue(chatId, out platos) || platos.Count == 0)
+                    return new List<Pedido>();
+
+                List<Pedido> nuevos = new List<Pedido>();
+                DateTime ahora = DateTime.Now;
+                foreach (Plato plato in platos)
+                {
+                    Pedido guardado = repositorio.Insertar(Pedido.Crear(0, chatId, nombreCliente, plato, ahora));
+                    pedidos.Add(guardado);
+                    nuevos.Add(guardado);
+                }
+                selecciones.Remove(chatId);
+                return nuevos;
+            }
+        }
+
+        public Pedido CancelarPendienteDeCliente(long chatId, int id)
+        {
+            lock (candado)
+            {
+                Pedido pedido = pedidos.FirstOrDefault(p => p.Id == id && p.ChatId == chatId && p.EstaPendiente);
+                if (pedido == null) return null;
+
+                pedido.MarcarComoCancelado();
+                repositorio.Actualizar(pedido);
+                return pedido;
+            }
+        }
+
         private Pedido BuscarPendiente(int id)
         {
             return pedidos.FirstOrDefault(p => p.Id == id && p.EstaPendiente);
